@@ -30,16 +30,6 @@
                             <x-input-error :messages="$errors->get('email')" class="mt-2" />
                         </div>
 
-                        <!-- Password -->
-                        <div class="mt-4">
-                            <x-input-label for="password" value="Password" />
-
-                            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password"
-                                :value="old('password', $user['password_hash'])" />
-
-                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                        </div>
-
                         <!-- Amount -->
                         <div class="mt-4">
                             <x-input-label for="amount" value="Amount" />
@@ -48,6 +38,16 @@
                                 :value="old('amount', $user['amount'])" />
 
                             <x-input-error :messages="$errors->get('amount')" class="mt-2" />
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mt-4">
+                            <x-input-label for="password" value="Password" />
+
+                            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password"
+                                :value="old('password', $user['password_hash'])" />
+
+                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
                         </div>
 
                         <div class="flex items-center justify-end mt-4">

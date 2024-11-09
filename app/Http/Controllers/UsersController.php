@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserSaveRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -103,25 +104,26 @@ class UsersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UserSaveRequest $request, string $id)
+    public function update(UserUpdateRequest $request, string $id)
     {
         try{
             DB::beginTransaction();
 
-            User::find($id)->update([
-                'name' => $request['name'],
-                'email' => $request['email'],
-                'password' => Hash::make($request['password']),
-                'password_hash' => Crypt::encryptString($request['password']),
-                'amount' => $request['amount'],
-            ]);
+            $user = User::find($id);
+            $user->fill($request->validated());
+
+            if ($user->isDirty('email')) {
+                $user->email_verified_at = null;
+            }
+
+            $user->save();
 
             DB::commit();
             info("user save");
 
             if ($request->is('api/*') || $request->expectsJson()) {
                 return response()->json([
-                    'product' => User::find($id),
+                    'user' => User::find($id),
                     'message' => "product updated"
                 ]);
             }
